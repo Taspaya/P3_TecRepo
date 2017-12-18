@@ -113,85 +113,78 @@ void Character::ControlMovement()
 
 }
 
-Mov Character::GetEventKey(SDL_Event &event){
-	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_KEYDOWN) {
-			switch (event.key.keysym.sym)
+void Character::GetEventKey(SDL_Event &_event) {
+	
+	
+		if (_event.type == SDL_KEYDOWN) {
+			switch (_event.key.keysym.sym)
 			{
-			/*case SDLK_ESCAPE:
-				currentScene = MENU;
-				break;*/
 			case SDLK_a://Si le das a la 
-				return Mov::A;//ponemos la tecla a la tecla actual que el jugador a pulsado 
+				KEY =  Mov::A;//ponemos la tecla a la tecla actual que el jugador a pulsado 
 				break;
 			case SDLK_d: //lo mismo con D
-				return Mov::D;
+				KEY =  Mov::D;
 				break;
 			case SDLK_s://lo mismo con S
-				return Mov::S;
+				KEY = Mov::S;
 				break;
 			case SDLK_w: //lo mismo con W
-				return Mov::W;
+				KEY = Mov::W;
 				break;
 			case SDLK_SPACE: //lo mismo con SPACE
-				return Mov::Space;
+				KEY =  Mov::Space;
 				break;
 			case SDLK_LEFT: //Lo mismo para el player 2 
-				return Mov::Left;//aqui cogemos el otro struct de teclas
+				KEY = Mov::Left;//aqui cogemos el otro struct de teclas
 				break;
 			case SDLK_RIGHT:
-				return Mov::Right;
+				KEY = Mov::Right;
 				break;
 			case SDLK_DOWN:
-				return Mov::Down;
+				KEY = Mov::Down;
 				break;
 			case SDLK_UP:
-				return Mov::Up;
+				KEY = Mov::Up;
 				break;
 			case SDLK_RCTRL:
-				return Mov::CTRL;
+				KEY = Mov::CTRL;
 				break;
 			default:
 				break;
 			}
 		}
-		/*else if (event.type == SDL_KEYUP) { // Quando levantamos la tecla...
+		else if (_event.type == SDL_KEYUP) { // Quando levantamos la tecla...
 
-			switch (event.key.keysym.sym)
+			switch (_event.key.keysym.sym)
 			{
-			case SDLK_ESCAPE:
-				currentScene = MENU;
-				break;
 			case SDLK_a://Si le das a la 
-				P1.Tecla = Mov::Nula;//ponemos la tecla a la tecla actual que el jugador a pulsado 
+				KEY =  Mov::Nula;//ponemos la tecla a la tecla actual que el jugador a pulsado 
 				break;
 			case SDLK_d: //lo mismo con D
-				P1.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			case SDLK_s://lo mismo con S
-				P1.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			case SDLK_w: //lo mismo con W
-				P1.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			case SDLK_LEFT: //Lo mismo para el player 2 
-				P2.Tecla = Mov::Nula;//aqui cogemos el otro struct de teclas
+				KEY = Mov::Nula;//aqui cogemos el otro struct de teclas
 				break;
 			case SDLK_RIGHT:
-				P2.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			case SDLK_DOWN:
-				P2.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			case SDLK_UP:
-				P2.Tecla = Mov::Nula;
+				KEY = Mov::Nula;
 				break;
 			default:
 				break;
-			}*/
+			}
 		}
-	return Mov::Nula;
-   }
-
+}
 
 

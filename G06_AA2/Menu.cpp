@@ -28,7 +28,7 @@ Menu::Menu()
 	btnRectScore = { (SCREEN_WIDTH / 2 - 50), 350, 100, 100 };
 	btnRectMusic = { (SCREEN_WIDTH / 2 - 50), 450, 100, 100 };
 	btnRectExit = { (SCREEN_WIDTH / 2 - 50), 550, 100, 100 };
-	//provando
+
 }
 
 

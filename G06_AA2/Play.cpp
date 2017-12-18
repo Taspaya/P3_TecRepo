@@ -41,9 +41,10 @@ Play::~Play()
 
 void Play::HandleEvents() {
 
-	P1.KEY = P1.GetEventKey(event);
-	P2.KEY = P2.GetEventKey(event);
-
+	while (SDL_PollEvent(&event)) {
+		P1.GetEventKey(event);
+		P2.GetEventKey(event);
+	}
 }
 
 void Play::Update() {

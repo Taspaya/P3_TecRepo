@@ -34,7 +34,7 @@ public:
 
 public:
 
-	 Mov GetEventKey(SDL_Event &event);
+	 void GetEventKey(SDL_Event &event);
 	 void AutoPaint(std::string);		//funcion que pinta al jugador
 	 void SetBomb(Character &Player);	//funcion que planta la bomba en el suelo
 	 void IsDead();						//funcion que comprueba que el jugador este vivo o muerto
