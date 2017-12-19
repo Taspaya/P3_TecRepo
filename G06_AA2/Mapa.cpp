@@ -35,9 +35,12 @@ Point Mapa::GetCelda(int _x, int _y)
 
 void Mapa::ModifyCell(int _x, int _y, TipoCelda _e, int &_c)	// FUNCION QUE NOS PERMITE MODIFICAR LA CELDA QUE QUERAMOS DEL MAPA Y MODIFICA ALEATORIAMENTE LOS DROPEOS DE LAS DESTRUIBLES
 {
-	/*_x = (int)((RELATIVE_START_X - _x) / -RELATIVE_START_X);
-	_y = (int)((RELATIVE_START_Y - _y) / -RELATIVE_START_X);*/
-	
+	if (_x > NUM_ROWS && _y > NUM_COLUMNS) {
+		_x = (int)((RELATIVE_START_X - _x) / -RELATIVE_START_X);
+		_y = (int)((RELATIVE_START_Y - _y) / -RELATIVE_START_X);
+		std::cout << _x << " ESTIC FENT LA CONVERSIO " << _y << std::endl;
+	}
+
 	if (_x > 0 && _x < NUM_ROWS &&  _y > 0 && _y < NUM_COLUMNS) {
 		if (Map[_x][_y]->cellID == TipoCelda::GRIS) {
 			_c = _c+ 15;
