@@ -102,12 +102,53 @@ void Character::PowerUps() {
 	}
 }
 	
-void Character::ControlMovement() 
+void Character::ControlMovement(Mov _mov) 
 {
 		// CALCULAMOS LA POSICION RELATIVA DEL PLAYER SOBRE LAS CELDAS DEL MAP
+		
+
+	switch (_mov)
+	{
+	case Mov::A:
+		centreP.x = Pos.x;
+		centreP.y = Pos.y + (frameHeight / 2);
+		break;
+	case Mov::Left:
+		centreP.x = Pos.x;
+		centreP.y = Pos.y + (frameHeight / 2);
+		break;
+	case Mov::D:
+		centreP.x = Pos.x + frameWidth;
+		centreP.y = Pos.y + (frameHeight / 2);
+		break;
+	case Mov::Right:
+		centreP.x = Pos.x + frameWidth;
+		centreP.y = Pos.y + (frameHeight / 2);
+		break;
+	case Mov::W:
+		centreP.x = Pos.x + (frameWidth / 2);
+		centreP.y = Pos.y;
+		break;
+	case Mov::Up:
+		centreP.x = Pos.x + (frameWidth / 2);
+		centreP.y = Pos.y;
+		break;
+	case Mov::Down:
+		centreP.x = Pos.x + (frameWidth / 2);
+		centreP.y = Pos.y + frameHeight;
+		break;
+	case Mov::S:
+		centreP.x = Pos.x + (frameWidth / 2);
+		centreP.y = Pos.y + frameHeight;
+		break;
+	default:
 		centreP.x = Pos.x + (frameHeight / 2);
 		centreP.y = Pos.y + (frameWidth / 2);
-			
+		break;
+	}
+
+
+
 		RelativePos.x = (int)((RELATIVE_START_X - centreP.x)  / -RELATIVE_START_X);
 		RelativePos.y = (int)((RELATIVE_START_Y - centreP.y)  / -RELATIVE_START_X);
 

@@ -23,7 +23,7 @@ public:
 	bool isCasc;		//tiene el powerup del casco?
 	bool isPatin;		//tiene el powerup del patin?
 	Point Pos;			//struct compuesto por dos INT que indican su coordenada
-	Point centreP;
+	Point centreP, rightP, leftP, upP, downP;
 	Point RelativePos;	//struct compuesto por dos INT que indican su coordenada respecto las celdas
 	float vel;			//valor de la velocidad del player
 	Mov KEY;			//struct de teclas del player ESTA DEFINIDO EN CONSTANS.H
@@ -39,7 +39,7 @@ public:
 	 void SetBomb(Character &Player);	//funcion que planta la bomba en el suelo
 	 void IsDead();						//funcion que comprueba que el jugador este vivo o muerto
 	 void PowerUps();					//funcion que controla los power ups
-	 void ControlMovement();
+	 void ControlMovement(Mov _mov);
 	 
 	 Character();
 	 ~Character();

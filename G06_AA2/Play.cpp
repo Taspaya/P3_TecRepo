@@ -49,24 +49,16 @@ void Play::HandleEvents() {
 
 void Play::Update() {
 	
-	P1.IsDead(); // comprovamos si el player esta muerto
-	P2.IsDead();
-	P1.ControlMovement(); // calcula la posicion relativa del player
-	P2.ControlMovement();
-	if (P1.isDead || P2.isDead || Hud.timeOver) currentScene = MENU; // comprovamos si ha acabado el juego y canviamos la currentScene
-	P1.PowerUps();		//si tiene powerups		
-	P2.PowerUps();
-
-
-
+	
 	if (P1.KEY == Mov::A && P1.Pos.x >= RELATIVE_START_X && !P1.colLeft) // comprovamos que no sale de los limites
 	{	
+		P1.ControlMovement(P1.KEY);
 		// movemos el player hacia la direccion correspondiente (Lo mismo con la resta de condiciones)
 		P1.Pos.x -= P1.vel;	
 		//Colisiones con las celdas (Lo mismo con la resta de condiciones)
-		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
+		if (MapGame.GetTypeCell(P1.RelativePos.x , P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P1.Pos.x += 5*P1.vel;
+			P1.Pos.x += P1.vel;
 			P1.KEY = Mov::Nula;
 		}
 		// comprovamos si tiene o no tiene powerUP (Lo mismo con la resta de condiciones)
@@ -83,10 +75,11 @@ void Play::Update() {
 	}
 	else if (P1.KEY == Mov::D && P1.Pos.x <= RELATIVE_END_X && !P1.colRight)
 	{
+		P1.ControlMovement(P1.KEY);
 		P1.Pos.x += P1.vel;
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P1.Pos.x -= 5*P1.vel;
+			P1.Pos.x -= P1.vel;
 			P1.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::PATINS && !P1.onPwup)
@@ -102,10 +95,11 @@ void Play::Update() {
 	}
 	else if (P1.KEY == Mov::S && P1.Pos.y <= RELATIVE_END_Y && !P1.colDown)
 	{
+		P1.ControlMovement(P1.KEY);
 		P1.Pos.y += P1.vel;
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P1.Pos.y -= 5*P1.vel;
+			P1.Pos.y -= P1.vel;
 			P1.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::PATINS && !P1.onPwup)
@@ -122,10 +116,11 @@ void Play::Update() {
 	}
 	else if (P1.KEY == Mov::W && P1.Pos.y >= RELATIVE_START_Y && !P1.colUp) 
 	{
+		P1.ControlMovement(P1.KEY);
 		P1.Pos.y -= P1.vel;
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P1.Pos.y += 5*P1.vel;
+			P1.Pos.y += P1.vel;
 			P1.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::PATINS && !P1.onPwup)
@@ -175,9 +170,10 @@ void Play::Update() {
 	}
 	else if (P2.KEY == Mov::Left && P2.Pos.x >= RELATIVE_START_X && !P2.colLeft)
 	{
+		P2.ControlMovement(P2.KEY);
 		P2.Pos.x -= P2.vel;
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
-			P2.Pos.x += 5 * P2.vel;
+			P2.Pos.x += P2.vel;
 			P2.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::PATINS && !P2.onPwup)
@@ -193,9 +189,10 @@ void Play::Update() {
 	}
 	else if (P2.KEY == Mov::Right && P2.Pos.x <= RELATIVE_END_X && !P2.colRight)
 	{
+		P2.ControlMovement(P2.KEY);
 		P2.Pos.x += P2.vel;
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
-			P2.Pos.x -= 5 * P2.vel;
+			P2.Pos.x -= P2.vel;
 			P2.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::PATINS && !P2.onPwup)
@@ -211,10 +208,11 @@ void Play::Update() {
 	}
 	else if (P2.KEY == Mov::Down && P2.Pos.y <= RELATIVE_END_Y && !P2.colDown)
 	{
+		P2.ControlMovement(P2.KEY);
 		P2.Pos.y += P2.vel;
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P2.Pos.y -= 5 * P2.vel;
+			P2.Pos.y -= P2.vel;
 			P2.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::PATINS && !P2.onPwup)
@@ -230,10 +228,11 @@ void Play::Update() {
 	}
 	else if (P2.KEY == Mov::Up && P2.Pos.y >= RELATIVE_START_Y && !P2.colUp)
 	{
+		P2.ControlMovement(P2.KEY);
 		P2.Pos.y -= P2.vel;
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
 			std::cout << "GRIS" << std::endl;
-			P2.Pos.y += 5 * P2.vel;
+			P2.Pos.y += P2.vel;
 			P2.KEY = Mov::Nula;
 		}
 		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::PATINS && !P2.onPwup)
@@ -255,7 +254,6 @@ void Play::Update() {
 		P2.posBombY = MapGame.GetCelda(P2.RelativePos.x, P2.RelativePos.y).y;
 		P2.Mybomb.Init(P2.posBombX, P2.posBombY);
 		if (!P1.isCasc)P2.Mybomb.DamagePlayers(P1.RelativePos.x, P1.RelativePos.y, P2.posBombX, P2.posBombY, P1.nLifes, P2.score);
-		//P1.Mybomb.DamagePlayers(P2.PosRelativa.x, P2.PosRelativa.y, P1.posBombX, P1.posBombY, P2.nLifes, P1.score);
 		//LA BOMBA DESTRUEIX TOTS ELS BLOCS DESTRUIBLES EN UN RANG DE 2 CASELLES
 		MapGame.ModifyCell((P2.RelativePos.x), (P2.RelativePos.y), TipoCelda::VACIO, P2.score);
 		MapGame.ModifyCell((P2.RelativePos.x), (P2.RelativePos.y + 2), TipoCelda::VACIO, P2.score);
@@ -269,7 +267,13 @@ void Play::Update() {
 		P2.KEY = Mov::Nula;
 	}
 	
-
+	P1.IsDead(); // comprovamos si el player esta muerto
+	P2.IsDead();
+	P1.ControlMovement(P1.KEY);
+	P2.ControlMovement(P2.KEY);
+	if (P1.isDead || P2.isDead || Hud.timeOver) currentScene = MENU; // comprovamos si ha acabado el juego y canviamos la currentScene
+	P1.PowerUps();		//si tiene powerups		
+	P2.PowerUps();
 }
 
 void Play::Draw() {
