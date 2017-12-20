@@ -7,18 +7,15 @@
 
 
 Play::Play(int _nScena)
-{
+{ 
 	srand(time(NULL));	
-	if (_nScena != 2) { // Dependiendo del nivel que queramos cargar, el mapa se inicializa de una forma o de otra
+	
+	readConfig(_nScena);
+	if (_nScena != 2)  // Dependiendo del nivel que queramos cargar, el mapa se inicializa de una forma o de otra
 		currentScene = PLAY1;
-		readConfig(LVL1);
-		MapGame.InitMapa(LVL1);
-	}
-	else { 
-		currentScene = PLAY2; 
-		readConfig(LVL2);
-		MapGame.InitMapa(LVL2);
-	}
+	else currentScene = PLAY2; 
+	
+	
 	
 	Mix_Music* cancionGAME{ Mix_LoadMUS("../../res/au/game_theme.mp3") }; // cargamos la cancion
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 2); // volumen de la cancion
@@ -26,8 +23,8 @@ Play::Play(int _nScena)
 
 	P1.Pos.x = RELATIVE_START_X;		//ponemos a cada player en su sitio 
 	P1.Pos.y = RELATIVE_START_Y;		
-	P2.Pos.x = RELATIVE_END_X;			
-	P2.Pos.y = RELATIVE_END_Y;
+	P2.Pos.x = RELATIVE_END_X - 10;			
+	P2.Pos.y = RELATIVE_END_Y - 10;
 
 	Renderer::Instance();
 	Renderer::Instance()->LoadTexture("FondoPlay", PATH_IMG + "bgGame.jpg");//Cargamos las texturas de BG y de ambos players dentro del vector de render
@@ -40,35 +37,57 @@ void Play::readConfig(int _x)
 	std::ifstream file("../../res/files/config.xml");
 	buffer << file.rdbuf();
 	file.close();
-	
+	std::string ids;
 	std::string content(buffer.str());
 	doc.parse<0>(&content[0]);
-	
+	int id;
+	int time;
 	/*std::cout << "arrel: " << doc.first_node()->name() << std::endl;*/
 	rapidxml::xml_node<> *pRoot = doc.first_node();
 	rapidxml::xml_attribute<> *pAttr;
 
-	if (_x == LVL1)
-	{
-		/*pRoot = pRoot->next_sibling();*/
-		for (rapidxml::xml_node<> *pNode = pRoot->first_node("Level"); pNode; pNode = pNode->next_sibling()) 
-		{
-		
-			//std::cout << pNode->name() << " : " << std::endl;
-			pAttr = pNode->first_attribute("id");
-			std::cout << pAttr->name() << " - " << pAttr->value() << std::endl;
 
-			if (pAttr->name() == "id" && pAttr->value() == pAttr->value()) {
-				std::cout << "HA ENTRAAAAAO ================" << std::endl;
-				P1.nLifes = atoi(pAttr->value());
-				P2.nLifes = atoi(pAttr->value());
+	/*pRoot = pRoot->next_sibling();*/
+	for (rapidxml::xml_node<> *pNode = pRoot->first_node("Level"); pNode; pNode = pNode->next_sibling())
+	{
+		pAttr = pNode->first_attribute("id");
+		ids = pAttr->value();
+		id = stoi(ids);
+
+		if (id == _x) {
+			switch (id)
+			{
+			case LVL1:
+				std::cout << "SE CARGA EL LVL 1" << std::endl;
+				pAttr = pNode->first_attribute("lives");
+				ids = pAttr->value();
+				P1.nLifes = P2.nLifes = id = stoi(ids);
+
+				pAttr = pNode->first_attribute("time");
+				ids = pAttr->value();
+				Hud.timetoplay = time = stoi(ids);
+				
+
+
+				MapGame.InitMapa(_x);
+				return;
+
+			case LVL2:
+				std::cout << "SE CARGA EL LVL 2" << std::endl;
+				pAttr = pNode->first_attribute("lives");
+				ids = pAttr->value();
+				P1.nLifes = P2.nLifes = id = stoi(ids);
+
+				pAttr = pNode->first_attribute("time");
+				ids = pAttr->value();
+				Hud.timetoplay = time = stoi(ids);
+				MapGame.InitMapa(_x);
+				MapGame.ModifyCellXML(1, 1, TipoCelda::VACIO);
+				return;
+			default:
+				break;
 			}
 		}
-
-	}
-	else if( _x == LVL2)
-	{
-
 	}
 
 
@@ -94,21 +113,19 @@ void Play::HandleEvents() {
 void Play::Update() {
 	
 	
-	if (P1.KEY == Mov::A && P1.Pos.x >= RELATIVE_START_X && !P1.colLeft) // comprovamos que no sale de los limites
+	if (P1.d && P1.Pos.x >= RELATIVE_START_X && !P1.colLeft) // comprovamos que no sale de los limites
 	{	
 		
 		// movemos el player hacia la direccion correspondiente (Lo mismo con la resta de condiciones)
 		P1.Pos.x -= P1.vel;	
 		//Colisiones con las celdas (Lo mismo con la resta de condiciones)
 		if (MapGame.GetTypeCell(P1.RelativePos.x , P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
 			P1.Pos.x += 2*P1.vel;
 			P1.KEY = Mov::Nula;
 		}
 		// comprovamos si tiene o no tiene powerUP (Lo mismo con la resta de condiciones)
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::PATINS && !P1.onPwup)
 		{
-			std::cout << "PLAYER:	"<< P1.RelativePos.x << "  |  " << P1.RelativePos.y << std::endl;
 			P1.isPatin = true;
 			MapGame.ModifyCell((P1.RelativePos.x), (P1.RelativePos.y), TipoCelda::VACIO, P1.score);
 		}
@@ -118,12 +135,11 @@ void Play::Update() {
 			MapGame.ModifyCell((P1.RelativePos.x), (P1.RelativePos.y), TipoCelda::VACIO, P1.score);
 		}
 	}
-	else if (P1.KEY == Mov::D && P1.Pos.x <= (RELATIVE_END_X-5) && !P1.colRight)
+	else if (P1.a && P1.Pos.x <= (RELATIVE_END_X-5) && !P1.colRight)
 	{
 		
 		P1.Pos.x += P1.vel;
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
 			P1.Pos.x -= 2*P1.vel;
 			P1.KEY = Mov::Nula;
 		}
@@ -131,7 +147,6 @@ void Play::Update() {
 		{
 			P1.isPatin = true;
 			MapGame.ModifyCell((P1.RelativePos.x), (P1.RelativePos.y), TipoCelda::VACIO, P1.score);
-			std::cout << P1.RelativePos.x << "  |  " << P1.RelativePos.y << std::endl;
 		}
 		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::CASC && !P1.onPwup)
 		{
@@ -139,12 +154,12 @@ void Play::Update() {
 			MapGame.ModifyCell((P1.RelativePos.x), (P1.RelativePos.y), TipoCelda::VACIO, P1.score);
 		}
 	}
-	else if (P1.KEY == Mov::S && P1.Pos.y <= (RELATIVE_END_Y -5) && !P1.colDown)
+	else if (P1.w && P1.Pos.y <= (RELATIVE_END_Y -5) && !P1.colDown)
 	{
 		
 		P1.Pos.y += P1.vel;
-		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
+		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) 
+		{
 			P1.Pos.y -= 2*P1.vel;
 			P1.KEY = Mov::Nula;
 		}
@@ -160,12 +175,12 @@ void Play::Update() {
 		}
 
 	}
-	else if (P1.KEY == Mov::W && P1.Pos.y >= RELATIVE_START_Y && !P1.colUp) 
+	else if (P1.s && P1.Pos.y >= RELATIVE_START_Y && !P1.colUp) 
 	{
 		
 		P1.Pos.y -= P1.vel;
-		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
+		if (MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P1.RelativePos.x, P1.RelativePos.y) == TipoCelda::INDES) 
+		{
 			P1.Pos.y += 2*P1.vel;
 			P1.KEY = Mov::Nula;
 		}
@@ -214,7 +229,7 @@ void Play::Update() {
 			P1.cBoom = false;
 		}
 	}
-	else if (P2.KEY == Mov::Left && P2.Pos.x >= RELATIVE_START_X && !P2.colLeft)
+	else if (P2.right && P2.Pos.x >= RELATIVE_START_X && !P2.colLeft)
 	{
 		
 		P2.Pos.x -= P2.vel;
@@ -233,7 +248,7 @@ void Play::Update() {
 			MapGame.ModifyCell((P2.RelativePos.x), (P2.RelativePos.y), TipoCelda::VACIO, P2.score);
 		}
 	}
-	else if (P2.KEY == Mov::Right && P2.Pos.x <= (RELATIVE_END_X - 5 ) && !P2.colRight)
+	else if (P2.left && P2.Pos.x <= (RELATIVE_END_X - 5 ) && !P2.colRight)
 	{
 		
 		P2.Pos.x += P2.vel;
@@ -252,12 +267,12 @@ void Play::Update() {
 			MapGame.ModifyCell((P2.RelativePos.x), (P2.RelativePos.y), TipoCelda::VACIO, P2.score);
 		}
 	}
-	else if (P2.KEY == Mov::Down && P2.Pos.y <= (RELATIVE_END_Y - 5) && !P2.colDown)
+	else if (P2.up && P2.Pos.y <= (RELATIVE_END_Y - 5) && !P2.colDown)
 	{
 		
 		P2.Pos.y += P2.vel;
-		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
+		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) 
+		{
 			P2.Pos.y -= 2 * P2.vel;
 			P2.KEY = Mov::Nula;
 		}
@@ -272,12 +287,12 @@ void Play::Update() {
 			MapGame.ModifyCell((P2.RelativePos.x), (P2.RelativePos.y), TipoCelda::VACIO, P2.score);
 		}
 	}
-	else if (P2.KEY == Mov::Up && P2.Pos.y >= RELATIVE_START_Y && !P2.colUp)
+	else if (P2.down && P2.Pos.y >= RELATIVE_START_Y && !P2.colUp)
 	{
 	
 		P2.Pos.y -= P2.vel;
-		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) {
-			std::cout << "GRIS" << std::endl;
+		if (MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::GRIS || MapGame.GetTypeCell(P2.RelativePos.x, P2.RelativePos.y) == TipoCelda::INDES) 
+		{
 			P2.Pos.y += 2 * P2.vel;
 			P2.KEY = Mov::Nula;
 		}

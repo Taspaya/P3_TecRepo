@@ -6,6 +6,7 @@ HUD::HUD()		// Inicializamos valores del HUD
 {
 	
 	timeStart = clock();
+	timetoplay = 80;
 	game_over.id = "gameover";
 	game_over.path = "../../res/ttf/game_over.ttf";
 	game_over.size = 100;
@@ -79,8 +80,7 @@ HUD::~HUD()
 void HUD::GameTime() { // SI EL TIEMPO DE JUEGO LLEGA A 80, SE CIERRA EL JUEGO
 	
 	time = (clock() - timeStart) / (double)CLOCKS_PER_SEC;
-	
-	if (time >= 80) { 
+	if (time >= timetoplay) {
 		timeOver = true;
 		GameOver(); 
 	}

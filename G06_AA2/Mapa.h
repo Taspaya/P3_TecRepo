@@ -18,6 +18,7 @@ public:
 	void InitMapa(int);
 	void DrawMap();
 	void ModifyCell(int, int,  TipoCelda, int &_e);
+	void ModifyCellXML(int, int, TipoCelda);
 	Point GetCelda(int, int);
 	TipoCelda GetTypeCell(int, int);
 

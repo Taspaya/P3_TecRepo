@@ -26,7 +26,7 @@ Character::Character()
 	colLeft = false;
 	colRight = false;
 	isDead = false;
-
+	w= a = s = d = up = down = left = right = false;
 	KEY = Mov::Nula;	
 	
 }
@@ -162,29 +162,37 @@ void Character::GetEventKey(SDL_Event &_event) {
 			{
 			case SDLK_a://Si le das a la 
 				KEY =  Mov::A;//ponemos la tecla a la tecla actual que el jugador a pulsado 
+				a = true;
 				break;
 			case SDLK_d: //lo mismo con D
 				KEY =  Mov::D;
+				d = true;
 				break;
 			case SDLK_s://lo mismo con S
 				KEY = Mov::S;
+				s = true;
 				break;
 			case SDLK_w: //lo mismo con W
 				KEY = Mov::W;
+				w = true;
 				break;
 			case SDLK_SPACE: //lo mismo con SPACE
 				KEY =  Mov::Space;
 				break;
 			case SDLK_LEFT: //Lo mismo para el player 2 
 				KEY = Mov::Left;//aqui cogemos el otro struct de teclas
+				left = true;
 				break;
 			case SDLK_RIGHT:
+				right = true;
 				KEY = Mov::Right;
 				break;
 			case SDLK_DOWN:
+				down = true;
 				KEY = Mov::Down;
 				break;
 			case SDLK_UP:
+				up = true;
 				KEY = Mov::Up;
 				break;
 			case SDLK_RCTRL:
@@ -200,26 +208,34 @@ void Character::GetEventKey(SDL_Event &_event) {
 			{
 			case SDLK_a://Si le das a la 
 				KEY =  Mov::Nula;//ponemos la tecla a la tecla actual que el jugador a pulsado 
+				a = false;
 				break;
 			case SDLK_d: //lo mismo con D
 				KEY = Mov::Nula;
+				d = false;
 				break;
 			case SDLK_s://lo mismo con S
 				KEY = Mov::Nula;
+				s = false;
 				break;
 			case SDLK_w: //lo mismo con W
+				w = false;
 				KEY = Mov::Nula;
 				break;
-			case SDLK_LEFT: //Lo mismo para el player 2 
+			case SDLK_LEFT:
+				left = false; //Lo mismo para el player 2 
 				KEY = Mov::Nula;//aqui cogemos el otro struct de teclas
 				break;
 			case SDLK_RIGHT:
+				right = false;
 				KEY = Mov::Nula;
 				break;
 			case SDLK_DOWN:
+				down = false;
 				KEY = Mov::Nula;
 				break;
 			case SDLK_UP:
+				up = false;
 				KEY = Mov::Nula;
 				break;
 			default:

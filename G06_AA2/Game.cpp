@@ -20,7 +20,7 @@ void Game::Run() {
 		switch (tipoEscena)		
 		{
 		case PLAY1:
-			MyScene = new Play(0);						// MyScene pasa a apuntar a un nuevo objeto Play, que recibe un caracter que no es 2, por lo tanto, es lvl 1
+			MyScene = new Play(1);						// MyScene pasa a apuntar a un nuevo objeto Play, que recibe un caracter que no es 2, por lo tanto, es lvl 1
 			while (tipoEscena == PLAY1) {				// Escena que nos movera al nivel 1 del juego
 				tipoEscena = MyScene->GetTypeScene();	// Pillamos el tipoEscena de la clase hijo
 				MyScene->HandleEvents();				

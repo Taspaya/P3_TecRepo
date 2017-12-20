@@ -16,14 +16,14 @@ public:
 	Bomb Mybomb;
 	int textWidth, textHeight, frameWidth, frameHeight, inmortal;//tamaños
 	SDL_Rect playerRect1, playerPosition1;//rectangulos
-	bool up, down, left, right, colUp, colDown, colRight, colLeft;
+	bool w,a,s,d, up, down, left, right, colUp, colDown, colRight, colLeft;
 	int nLifes;			//numero de vidas de los jugadores
 	bool cBoom;			//booleano de si tiene una bomba ya puesta
 	int score;			//valor de su puntuacion
 	bool isCasc;		//tiene el powerup del casco?
 	bool isPatin;		//tiene el powerup del patin?
 	Point Pos;			//struct compuesto por dos INT que indican su coordenada
-	Point centreP, rightP, leftP, upP, downP;
+	Point centreP;
 	Point RelativePos;	//struct compuesto por dos INT que indican su coordenada respecto las celdas
 	float vel;			//valor de la velocidad del player
 	Mov KEY;			//struct de teclas del player ESTA DEFINIDO EN CONSTANS.H

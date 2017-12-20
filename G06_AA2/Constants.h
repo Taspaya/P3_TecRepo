@@ -7,7 +7,7 @@
 #define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 704
 
-#define LVL1 0
+#define LVL1 1
 #define LVL2 2
 // ==== >PLAYER< ======
 #define PLAYER_START_N_LIFES 3

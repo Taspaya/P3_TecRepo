@@ -11,6 +11,7 @@ class HUD
 public:
 	
 	bool timeOver;
+	int timetoplay;
 	clock_t timeStart;
 	Text LifeP1; //texto de las vidas del player 1
 	Text LifeP2; //texto de las vidas del player 2
